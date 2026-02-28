@@ -44,8 +44,8 @@ function Navbar() {
 
                     <div className="flex items-center gap-4 ml-4">
                         <SignedOut>
-                            <SignInButton />
-                            <SignUpButton />
+                            <SignInButton mode="modal" />
+                            <SignUpButton mode="modal" />
                         </SignedOut>
                         <SignedIn>
                             <div className="nav-user-link">

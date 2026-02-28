@@ -1,15 +1,16 @@
-"use client"
-
 import BookCard from "@/components/BookCard";
 import LibraryHero from "@/components/LibraryHero";
-import { sampleBooks } from "@/lib/constants";
+import { getAllBooks } from "@/lib/actions/book.actions";
 
-function page() {
+async function page() {
+  const bookResult = await getAllBooks();
+  const books = bookResult.success ? bookResult.data ?? []: [];
+
   return (
       <main className="wrapper container">
         <LibraryHero />
         <div className="library-books-grid mt-10">
-            {sampleBooks.map((book) => (
+            {books.map((book) => (
                 <BookCard 
                   key={book._id} 
                   title={book.title}
