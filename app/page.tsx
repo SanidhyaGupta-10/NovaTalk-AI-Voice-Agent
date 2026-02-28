@@ -1,11 +1,25 @@
 "use client"
-import Navbar from "@/components/Navbar";
+
+import BookCard from "@/components/BookCard";
+import LibraryHero from "@/components/LibraryHero";
+import { sampleBooks } from "@/lib/constants";
 
 function page() {
   return (
-    <div>
-      <Navbar />
-    </div>
+      <main className="wrapper container">
+        <LibraryHero />
+        <div className="library-books-grid mt-10">
+            {sampleBooks.map((book) => (
+                <BookCard 
+                  key={book._id} 
+                  title={book.title}
+                  author={book.author}
+                  coverURL={book.coverURL}
+                  slug={book.slug}
+                />
+            ))}
+        </div>
+      </main>
   )
 }
 

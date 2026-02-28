@@ -5,18 +5,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-  useUser,
+    SignInButton,
+    SignUpButton,
+    SignedIn,
+    SignedOut,
+    UserButton,
+    useUser,
 } from "@clerk/nextjs";
 
 const navItems = [
     { label: "Library", href: "/" },
     { label: "Add New", href: "/books/new" },
-    { label: "Pricing", href: "/subscriptions" },
+    // { label: "Pricing", href: "/subscriptions" },
 ]
 
 function Navbar() {
@@ -41,19 +41,22 @@ function Navbar() {
                             </Link>
                         )
                     })}
-                    
+
                     <div className="flex items-center gap-4 ml-4">
                         <SignedOut>
                             <SignInButton />
                             <SignUpButton />
                         </SignedOut>
                         <SignedIn>
-                            <UserButton />
-                            {user?.firstName && (
-                                <Link href="/subscriptions" className="text-lg font-medium text-black hover:opacity-70">
-                                    {user.firstName}
-                                </Link>
-                            )}
+                            <div className="nav-user-link">
+
+                                <UserButton />
+                                {user?.firstName && (
+                                    <Link href="/subscriptions" className="nav-user-name">
+                                        {user.firstName}
+                                    </Link>
+                                )}
+                            </div>
                         </SignedIn>
                     </div>
                 </nav>

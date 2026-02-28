@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { IBM_Plex_Serif, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 const ibmPlexSerif = IBM_Plex_Serif({
   subsets: ["latin"],
@@ -33,6 +34,7 @@ export default function RootLayout({
           suppressHydrationWarning
           className={`${ibmPlexSerif.variable} ${geistMono.variable} antialiased`}
         >
+          <Navbar />
           {children}
         </body>
       </html>
