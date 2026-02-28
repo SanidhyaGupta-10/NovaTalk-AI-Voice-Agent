@@ -169,6 +169,17 @@
   body {
     @apply bg-background text-foreground;
   }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
 }
 
 @layer utilities {
@@ -614,10 +625,10 @@
      VOICE SELECTOR COMPONENT
      =========================================== */
   .voice-selector-options {
-    @apply flex gap-4;
+    @apply flex flex-wrap gap-4;
   }
   .voice-selector-option {
-    @apply flex-1 flex items-center justify-center gap-3 p-4 border border-[var(--border-subtle)] rounded-lg cursor-pointer transition-all;
+    @apply flex-1 min-w-[150px] flex items-center justify-center gap-3 p-4 border border-[var(--border-subtle)] rounded-lg cursor-pointer transition-all;
     box-shadow: var(--shadow-soft-sm);
 
     &:hover {

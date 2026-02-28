@@ -60,7 +60,7 @@ const FileUploader = <T extends FieldValues>({
                     <input
                         type="file"
                         accept={acceptTypes.join(',')}
-                        className="hidden"
+                        style={{ display: 'none' }}
                         ref={inputRef}
                         onChange={handleFileChange}
                         disabled={disabled}
