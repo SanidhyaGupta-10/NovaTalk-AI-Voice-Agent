@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 import { Plus } from "lucide-react";
 
@@ -16,10 +17,10 @@ export default function LibraryHero() {
                         <p className="library-hero-description">
                             Convert your books into interactive AI conversations. Listen, learn, and discuss your favorite reads.
                         </p>
-                        <button className="library-cta-primary mt-2">
+                        <Link href="/books/new" className="library-cta-primary mt-2">
                             <Plus className="w-5 h-5 text-gray-600" />
                             Add new book
-                        </button>
+                        </Link>
                     </div>
 
                     {/* Center Image - Only shown on large screens in this layout */}
