@@ -42,6 +42,7 @@ function VapiControls({ book }: { book: IBook }) {
                             <button 
                                 className={`vapi-mic-btn ${isActive ? 'vapi-mic-btn-active' : 'vapi-mic-btn-inactive'}`}
                                 onClick={isActive ? stop : start}
+                                disabled={status === "connection"}
                             >
                                 {isActive ? (
                                     <Mic className="size-6 text-[#663820]" />
