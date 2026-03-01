@@ -969,3 +969,7 @@ button[data-variant='unstyled'] *,
   border-radius: 0.75rem;
   font-size: 1.125rem;
 }
+
+.pricing-table-wrapper {
+  @apply w-full flex justify-center;
+}

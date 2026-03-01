@@ -10,19 +10,40 @@ export const startVoiceSession = async (clerkId: string, bookId: string): Promis
     try {
         await connectToDatabase();
 
-        // Limits/Plan to see whether a session is allowed
+        const { getUserPlan } = await import('@/lib/subscription.server');
+        const { PLAN_LIMITS, getCurremtBillingPeriodStart } = await import('../subscription-constants');
 
-        const session = await VoiceSession.findOne({
-            clerkId,  
-            bookId, 
+        const plan = await getUserPlan();
+        const limits = PLAN_LIMITS[plan];
+
+        const billingPeriodStart = getCurremtBillingPeriodStart();
+
+        // Check monthly session limits
+        const sessionCount = await VoiceSession.countDocuments({
+            clerkId,
+            startedAt: { $gte: billingPeriodStart }
+        });
+
+        if (sessionCount >= limits.maxSessionsPerMonth) {
+            return {
+                success: false,
+                error: `You have reached your monthly session limit (${limits.maxSessionsPerMonth}) for the ${plan} plan. Please upgrade to continue.`,
+                isBillingError: true
+            };
+        }
+
+        const session = await VoiceSession.create({
+            clerkId,
+            bookId,
             startedAt: new Date(),
-            billingPeriodStart: getCurremtBillingPeriodStart(),
+            billingPeriodStart,
             durationSeconds: 0,
         });
 
         return {
             success: true,
-            sessionId: session?._id?.toString(), 
+            sessionId: session?._id?.toString(),
+            maxDurationMinutes: limits.maxMinutesPerSession
         }
 
     } catch (error) {
