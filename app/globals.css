@@ -376,7 +376,7 @@
      LAYOUT CONTAINERS
      =========================================== */
   .vapi-main-container {
-    @apply w-full flex flex-col items-center max-w-4xl mx-auto;
+    @apply w-full flex flex-col items-center max-w-3xl mx-auto gap-10;
   }
   .vapi-card-layout {
     @apply flex flex-col sm:flex-row items-center sm:items-start gap-5 sm:gap-8;
@@ -395,13 +395,14 @@
      VAPI CONTROLS COMPONENT
      =========================================== */
   .vapi-header-card {
-    @apply flex items-center gap-6 bg-[#f3e4c7] rounded-[14px] p-6 relative overflow-hidden;
+    @apply flex flex-col sm:flex-row items-center sm:items-stretch gap-6 sm:gap-10 bg-[#f3e4c7] rounded-[24px] p-8 relative w-full;
+    box-shadow: 0 10px 40px -10px rgba(102, 56, 32, 0.1);
   }
   .vapi-compact-header {
     @apply flex items-center gap-2 bg-[#f3e4c7] rounded-[14px] p-3 mb-3;
   }
   .vapi-transcript-wrapper {
-    @apply min-h-[400px] max-h-[60vh] flex flex-col;
+    @apply w-full min-h-[500px] max-h-[70vh] flex flex-col mt-8;
   }
   .vapi-cover-wrapper {
     @apply relative shrink-0;
@@ -414,19 +415,18 @@
     box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.1);
   }
   .vapi-mic-wrapper {
-    @apply absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2;
+    @apply absolute -bottom-4 -right-4 sm:-bottom-5 sm:-right-5;
   }
   .vapi-pulse-ring {
-    @apply absolute inset-0 w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] bg-white rounded-full opacity-50 animate-ping;
+    @apply absolute inset-0 w-full h-full bg-[#663820] rounded-full opacity-20 animate-ping;
+    transform: scale(1.4);
   }
   .vapi-mic-btn {
-    @apply relative w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] cursor-pointer rounded-full flex items-center justify-center transition-all duration-300 border-0 bg-white;
+    @apply relative w-[54px] h-[54px] sm:w-[68px] sm:h-[68px] cursor-pointer rounded-full flex items-center justify-center transition-all duration-300 border-none shadow-lg z-10;
 
     &:hover {
-      transform: scale(1.05);
-    }
-    &:hover svg {
-      @apply text-[#aaa];
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.2);
     }
     &:active {
       transform: scale(0.95);
@@ -436,10 +436,10 @@
     }
   }
   .vapi-mic-btn-active {
-    @apply bg-white;
+    @apply bg-[#663820] text-white;
   }
   .vapi-mic-btn-inactive {
-    @apply bg-white;
+    @apply bg-white text-[#212a3b];
   }
   .vapi-badge-ai {
     @apply inline-block bg-white px-3 py-2 rounded-[4px];
@@ -449,7 +449,11 @@
     font-family: 'IBM Plex Serif', serif;
   }
   .vapi-status-indicator {
-    @apply flex items-center gap-2 bg-white px-3 py-2 rounded-[4px];
+    @apply flex items-center gap-2 bg-white px-5 py-2 rounded-lg shadow-sm;
+  }
+  .vapi-status-text {
+    @apply text-sm font-medium text-[#212a3b];
+    font-family: 'IBM Plex Serif', serif;
   }
   .vapi-status-dot {
     @apply inline-block w-3 h-3 rounded-full;
@@ -570,10 +574,11 @@
      TRANSCRIPT COMPONENT
      =========================================== */
   .transcript-container {
-    @apply w-full bg-white rounded-[14px] h-full min-h-0 flex flex-col;
+    @apply w-full bg-white rounded-[24px] h-full min-h-0 flex flex-col border border-[rgba(33,42,59,0.08)];
+    box-shadow: 0 20px 50px -15px rgba(33, 42, 59, 0.08);
   }
   .transcript-messages {
-    @apply flex flex-col gap-4 sm:gap-6 p-4 sm:p-6 flex-1 overflow-y-auto scroll-smooth;
+    @apply flex flex-col gap-5 sm:gap-7 p-6 sm:p-10 flex-1 overflow-y-auto scroll-smooth bg-[#fafafa];
 
     /* Custom scrollbar */
     &::-webkit-scrollbar {

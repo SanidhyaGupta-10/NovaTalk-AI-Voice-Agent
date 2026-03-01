@@ -31,13 +31,7 @@ export default async function BookDetailsPage({ params }: PageProps) {
                 <ArrowLeft className="size-6 text-[#212a3b]" />
             </Link>
 
-            <div className="vapi-main-container space-y-8">
-                {/* Header card */}
-
-
-                {/* Transcript area */}
-                <VapiControls book={book} />
-            </div>
+            <VapiControls book={book} />
         </div>
     );
 }
