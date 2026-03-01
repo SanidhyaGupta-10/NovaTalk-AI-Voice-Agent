@@ -1,4 +1,4 @@
-export const getCurremtBillingPeriodStart = () => {
+export const getCurrentBillingPeriodStart = () => {
     const now = new Date();
     // Billing tracked by calendar month
     const start = new Date(now.getFullYear(), now.getMonth(), 1);

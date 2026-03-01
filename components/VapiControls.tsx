@@ -3,6 +3,7 @@
 import { IBook } from '@/types'
 import useVapi from '@/hooks/useVapi'
 import { DEFAULT_VOICE } from '@/lib/constants';
+import { usePlan } from '@/hooks/usePlan';
 import Image from 'next/image';
 import {
     MicOff,
@@ -26,9 +27,12 @@ function VapiControls({ book }: { book: IBook }) {
         currentMessage,
         currentUserMessage,
         duration,
+        maxDurationMinutes,
         start,
         stop,
         clearErrors, } = useVapi(book);
+
+    const { limits, isLoaded: isPlanLoaded } = usePlan();
 
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60);
@@ -98,7 +102,12 @@ function VapiControls({ book }: { book: IBook }) {
                         <div className="vapi-status-indicator">
                             <Clock className="size-4 text-[#212a3b]" />
                             <span className="vapi-status-text">
-                                {isActive ? formatTime(duration) : "0:00"}/15:00
+                                {isActive ? formatTime(duration) : "0:00"}/
+                                {isActive 
+                                    ? `${maxDurationMinutes}:00` 
+                                    : isPlanLoaded 
+                                        ? `${limits?.maxMinutesPerSession}:00` 
+                                        : "15:00"}
                             </span>
                         </div>
                     </div>

@@ -3,7 +3,7 @@
 import VoiceSession from "@/database/models/voice-session.model";
 import { connectToDatabase } from "@/database/mongoose";
 import { EndSessionResult, StartSessionResult } from "@/types";
-import { getCurremtBillingPeriodStart } from "../subscription-constants";
+import { getCurrentBillingPeriodStart } from "../subscription-constants";
 
 
 export const startVoiceSession = async (clerkId: string, bookId: string): Promise<StartSessionResult> => {
@@ -11,12 +11,12 @@ export const startVoiceSession = async (clerkId: string, bookId: string): Promis
         await connectToDatabase();
 
         const { getUserPlan } = await import('@/lib/subscription.server');
-        const { PLAN_LIMITS, getCurremtBillingPeriodStart } = await import('../subscription-constants');
+        const { PLAN_LIMITS, getCurrentBillingPeriodStart } = await import('../subscription-constants');
 
         const plan = await getUserPlan();
         const limits = PLAN_LIMITS[plan];
 
-        const billingPeriodStart = getCurremtBillingPeriodStart();
+        const billingPeriodStart = getCurrentBillingPeriodStart();
 
         // Check monthly session limits
         const sessionCount = await VoiceSession.countDocuments({
@@ -61,7 +61,7 @@ export const endVoiceSession = async (sessionId: string, durationSeconds: number
             endedAt: new Date(),
         });
 
-        if(!result) {
+        if (!result) {
             return { success: false, error: 'Session not found' };
         }
         return {

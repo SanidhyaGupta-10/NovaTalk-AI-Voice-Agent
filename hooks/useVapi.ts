@@ -36,6 +36,7 @@ export function useVapi(book: IBook) {
     const [currentMessage, setCurrentMessage] = useState('');
     const [currentUserMessage, setCurrentUserMessage] = useState('');
     const [duration, setDuration] = useState(0);
+    const [maxDurationMinutes, setMaxDurationMinutes] = useState(15); // Default to 15
     const [limitError, setLimitError] = useState<string | null>(null);
 
     const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -46,6 +47,7 @@ export function useVapi(book: IBook) {
     // Keep refs in sync with latest values for use in callbacks
     const bookRef = useLatestRef(book);
     const durationRef = useLatestRef(duration);
+    const maxDurationRef = useLatestRef(maxDurationMinutes);
     const voice = book.persona || DEFAULT_VOICE;
 
     const isActive = status === 'listening' || status === 'thinking' || status === 'speaking' || status === 'starting';
@@ -72,6 +74,9 @@ export function useVapi(book: IBook) {
             }
 
             sessionIdRef.current = result.sessionId || null;
+            if (result.maxDurationMinutes) {
+                setMaxDurationMinutes(result.maxDurationMinutes);
+            }
 
             const firstMessage = `Hey, good to meet you. Quick question, before we dive in: have you actually read ${book.title} yet? or we starting fresh?`
 
@@ -121,6 +126,13 @@ export function useVapi(book: IBook) {
                 if (startTimeRef.current) {
                     const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000);
                     setDuration(elapsed);
+
+                    // Auto-stop if limit reached
+                    if (elapsed >= maxDurationRef.current * 60) {
+                        console.log("Session limit reached, stopping call");
+                        getVapi().stop();
+                        if (timerRef.current) clearInterval(timerRef.current);
+                    }
                 }
             }, 1000);
         };
@@ -209,6 +221,7 @@ export function useVapi(book: IBook) {
         currentMessage,
         currentUserMessage,
         duration,
+        maxDurationMinutes,
         start,
         stop,
         clearErrors,
