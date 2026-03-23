@@ -109,6 +109,10 @@ export const createBook = async (data: CreateBook) => {
 
         const book = await Book.create({...data, clerkId: userId, slug, totalSegments: 0});
 
+        const { revalidatePath } = await import("next/cache");
+        revalidatePath("/");
+        revalidatePath(`/books/${slug}`);
+
         return {
             success: true,
             data: serializeData(book),
@@ -151,19 +155,31 @@ export const saveBookSegments = async (bookId: string, clerkId: string, segments
 
         console.log('Saving book segments...');
 
+        const bookObjectId = new mongoose.Types.ObjectId(bookId);
+
         const segmentsToInsert = segments.map(({ text, segmentIndex, pageNumber, wordCount }) => ({
-            clerkId, bookId, content: text, segmentIndex, pageNumber, wordCount
+            clerkId,
+            bookId: bookObjectId,
+            content: text,
+            segmentIndex,
+            pageNumber,
+            wordCount,
         }));
 
-        await BookSegment.insertMany(segmentsToInsert);
+        await BookSegment.insertMany(segmentsToInsert, { ordered: true });
 
-        await Book.findByIdAndUpdate(bookId, { totalSegments: segments.length });
+        const totalSegments = await BookSegment.countDocuments({ bookId: bookObjectId });
+
+        await Book.findByIdAndUpdate(bookId, { totalSegments });
+
+        const { revalidatePath } = await import("next/cache");
+        revalidatePath("/");
 
         console.log('Book segments saved successfully.');
 
         return {
             success: true,
-            data: { segmentsCreated: segments.length}
+            data: { segmentsCreated: segments.length, totalSegments }
         }
     } catch (e) {
         console.error('Error saving book segments', e);

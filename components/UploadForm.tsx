@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Upload, ImageIcon } from 'lucide-react';
-import { BookUploadFormValues } from '@/types';
+import { BookUploadFormValues, TextSegment } from '@/types';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -12,14 +12,29 @@ import { ACCEPTED_PDF_TYPES, ACCEPTED_IMAGE_TYPES, DEFAULT_VOICE } from '@/lib/c
 import FileUploader from './FileUploader';
 import VoiceSelector from './VoiceSelector';
 
-import {useAuth, useUser} from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import { toast } from 'sonner';
 import {checkBookExists, createBook, saveBookSegments} from "@/lib/actions/book.actions";
 import {useRouter} from "next/navigation";
-import {parsePDFFile} from "@/lib/utils";
+import { parsePDFFile } from "@/lib/pdf";
 import {upload} from "@vercel/blob/client";
 import { UploadSchema } from '@/lib/zod';
 import LoadingOverlay from './LoadingOverlay';
+
+const SEGMENT_BATCH_SIZE = 25;
+
+const saveBookSegmentsInBatches = async (bookId: string, clerkId: string, segments: TextSegment[]) => {
+    for (let startIndex = 0; startIndex < segments.length; startIndex += SEGMENT_BATCH_SIZE) {
+        const batch = segments.slice(startIndex, startIndex + SEGMENT_BATCH_SIZE);
+        const result = await saveBookSegments(bookId, clerkId, batch);
+
+        if (!result.success) {
+            return result;
+        }
+    }
+
+    return { success: true } as const;
+};
 
 const UploadForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -125,7 +140,7 @@ const UploadForm = () => {
                 return;
             }
 
-            const segments = await saveBookSegments(book.data._id, userId, parsedPDF.content);
+            const segments = await saveBookSegmentsInBatches(book.data._id, userId, parsedPDF.content);
 
             if(!segments.success) {
                 toast.error("Failed to save book segments");
@@ -133,7 +148,7 @@ const UploadForm = () => {
             }
 
             form.reset();
-            router.push('/');
+            router.push(`/books/${book.data.slug}`);
         } catch (error) {
             console.error(error);
 
