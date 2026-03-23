@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { IBook } from '@/types';
-import VapiControls from '@/components/VapiControls';
+import VapiControls from '@/app/components/VapiControls';
 import { auth } from '@clerk/nextjs/server';
 
 interface PageProps {

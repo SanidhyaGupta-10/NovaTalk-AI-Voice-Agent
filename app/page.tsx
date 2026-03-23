@@ -1,6 +1,6 @@
-import BookCard from "@/components/BookCard";
-import LibraryHero from "@/components/LibraryHero";
-import SearchBar from "@/components/SearchBar";
+import BookCard from "@/app/components/BookCard";
+import LibraryHero from "@/app/components/LibraryHero";
+import SearchBar from "@/app/components/SearchBar";
 import { getAllBooks } from "@/lib/actions/book.actions";
 
 interface SearchParams {

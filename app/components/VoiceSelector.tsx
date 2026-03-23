@@ -3,8 +3,8 @@
 import React from 'react';
 import { voiceCategories, voiceOptions } from '@/lib/constants';
 import { cn } from '@/lib/utils';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/app/components/ui/radio-group';
+import { Label } from '@/app/components/ui/label';
 import { VoiceSelectorProps } from '@/types';
 
 const VoiceSelector = ({ value, onChange, disabled, className }: VoiceSelectorProps) => {

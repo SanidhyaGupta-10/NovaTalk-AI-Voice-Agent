@@ -5,7 +5,7 @@ import { useController, FieldValues } from 'react-hook-form';
 import { X } from 'lucide-react';
 import { FileUploadFieldProps } from '@/types';
 import { cn } from '@/lib/utils';
-import { FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormItem, FormLabel, FormControl, FormMessage } from '@/app/components/ui/form';
 
 const FileUploader = <T extends FieldValues>({
     control,
