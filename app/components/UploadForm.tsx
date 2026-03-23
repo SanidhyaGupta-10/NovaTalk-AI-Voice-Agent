@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Upload, ImageIcon } from 'lucide-react';
-import { BookUploadFormValues } from '@/types';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { BookUploadFormValues, TextSegment } from '@/types';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
 import { ACCEPTED_PDF_TYPES, ACCEPTED_IMAGE_TYPES, DEFAULT_VOICE } from '@/lib/constants';
 import FileUploader from './FileUploader';
 import VoiceSelector from './VoiceSelector';
@@ -251,7 +251,9 @@ const UploadForm = () => {
                         />
 
                         {/* 6. Submit Button */}
-                        <Button type="submit" className="form-btn" disabled={isSubmitting}>
+                        <Button type="submit" 
+                        className="form-btn" 
+                        disabled={isSubmitting}>
                             Begin Synthesis
                         </Button>
                     </form>

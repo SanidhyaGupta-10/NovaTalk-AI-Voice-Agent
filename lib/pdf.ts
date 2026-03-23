@@ -48,8 +48,8 @@ export async function parsePDFFile(file: File) {
             const page = await pdfDocument.getPage(pageNum);
             const textContent = await page.getTextContent();
             const pageText = textContent.items
-                .filter((item): item is PDFTextItem => 'str' in item)
-                .map((item) => item.str)
+                .filter((item) => 'str' in item)
+                .map((item) => (item as { str: string }).str)
                 .join(' ');
 
             fullText += `${pageText}\n`;
