@@ -1,18 +1,8 @@
 import { splitIntoSegments } from '@/lib/utils';
 
-type RenderTask = { promise: Promise<void> };
-
+type PdfJsModule = typeof import('pdfjs-dist');
+type PDFDocumentHandle = Awaited<ReturnType<PdfJsModule['getDocument']>['promise']>;
 type PDFTextItem = { str: string };
-
-type PDFDocumentHandle = {
-    destroy: () => Promise<void>;
-    getPage: (pageNumber: number) => Promise<{
-        getViewport: (options: { scale: number }) => { width: number; height: number };
-        render: (options: { canvasContext: CanvasRenderingContext2D; viewport: { width: number; height: number } }) => RenderTask;
-        getTextContent: () => Promise<{ items: unknown[] }>;
-    }>;
-    numPages: number;
-};
 
 export async function parsePDFFile(file: File) {
     let pdfDocument: PDFDocumentHandle | null = null;
@@ -27,7 +17,7 @@ export async function parsePDFFile(file: File) {
 
         const arrayBuffer = await file.arrayBuffer();
         const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
-        pdfDocument = await loadingTask.promise as PDFDocumentHandle;
+        pdfDocument = await loadingTask.promise;
 
         const firstPage = await pdfDocument.getPage(1);
         const viewport = firstPage.getViewport({ scale: 2 });
@@ -43,6 +33,7 @@ export async function parsePDFFile(file: File) {
         }
 
         const renderTask = firstPage.render({
+            canvas,
             canvasContext: context,
             viewport,
         });
